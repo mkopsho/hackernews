@@ -1,0 +1,204 @@
+## Basic Querying (query and mutation)
+# query to get all links
+# query {
+#   links {
+#     id
+#     description
+#     url
+#   }
+# }
+
+# query to create and return a link
+# mutation {
+#   createLink(url: "blah", description: "blahblah") {
+#     id
+#     url
+#     description
+#   }
+# }
+
+# query to create and return a user
+# mutation {
+#   createUser(username: "mkopsho", email: "michael.kopsho@gmail.com", password: "mkopsho") {
+#     user {
+#       id
+#       username
+#       email
+#     }
+#   }
+# }
+
+# query to return all users
+# query {
+#   users {
+#     username
+#     email
+#     id
+#   }
+# }
+
+## Querying with django-graphql-jwt
+# query to generate and return a token for this user (this and the following query presumes django-graphql-jwt middleware is setup)
+# mutation {
+#   tokenAuth(username:"mkopsho", password:"mkopsho") {
+#     token
+#   }
+# }
+
+# query to verify a token and return the associated user and expiry period
+# mutation {
+#   verifyToken(token: "<tokenString>") {
+#      payload
+#    }
+#  }
+
+# query to check the currently logged-in user (presumes a valid JWT token is passed in the "Authorization" header)
+# query {
+#   me {
+#     username
+#     email
+#     id
+#   }
+# }
+
+## Altogether now
+# query to create and return a link with a `postedBy` field
+# mutation {
+#   createLink(url:"https://kopsho.cafe", description:"My portfolio site") {
+#     id
+#     url
+#     description
+#     postedBy {
+#       id
+#       username
+#       email
+#     }
+#   }
+# }
+
+# query to create and return a vote with its associated link
+# mutation {
+#   createVote(linkId: 1) {
+#     user {
+#       id
+#       username
+#       email
+#     }
+#     link {
+#       id
+#       url
+#       description
+#     }
+#   }
+# }
+
+# query to return all votes with their associated links
+# query {
+#   votes {
+#     id
+#     user {
+#       id
+#       username
+#     }
+#     link {
+#       id
+#       url
+#       description
+#     }
+#   }
+# }
+
+# query {
+#   links {
+#     id
+#     url
+#     votes {
+#       id
+#       user {
+#         username
+#         id
+#       }
+#     }
+#   }
+# }
+
+# query to create a vote for a link that doesn't exost (should get a GraphQLError or python Exception if handled in the method)
+# mutation {
+#   createVote(linkId: 10) {
+#     user {
+#       id
+#       username
+#       email
+#     }
+#     link {
+#       id
+#       description
+#       url
+#     }
+#   }
+# }
+
+# query for links with pagination https://graphql.org/learn/pagination/
+# query {
+#   links(first:2, skip:1) {
+#     id
+#     url
+#     description
+#   }
+# }
+
+## Relay (https://relay.dev/) querying
+# query to get links with Relay; edges are collections w/ pagination properties, nodes are the final object or "edge" for a new set of objects
+# query {
+#   relayLinks {
+#     edges {
+#       node {
+#         id
+#         url
+#         description
+#         votes {
+#           edges {
+#             node {
+#               id
+#               user {
+#                 id
+#               }
+#             }
+#           }
+#         }
+#       }
+#     }
+#   }
+# }
+
+# query to get links with Relay pagination props: before, after, first and last; each edge has a `pageInfo` object, including the cursor for navigating between pages
+# query {
+#   relayLinks(first: 1, after: "YXJyYXljb25uZWN0aW9uOjA=") { returns the first link after the `endCursor` id
+#     edges {
+#       node {
+#         id
+#         url
+#         description
+#       }
+#     }
+#     pageInfo {
+#       startCursor
+#       endCursor
+#     }
+#   }
+# }
+
+# query to create a link with Relay; `input` can accept a url and description as a dict
+# mutation {
+#   relayCreateLink(input: {
+#     url: "https://dog.random",
+#     description: "Get a random dog"}
+#   ) {
+#     link {
+#       id
+#       url
+#       description
+#     }
+#   }
+# }
+
