@@ -49,7 +49,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'graphql_jwt.middleware.JSONWebTokenMiddleware',
+    'graphql_jwt.middleware.JSONWebTokenMiddleware', # https://github.com/howtographql/howtographql/issues/956
 ]
 
 ROOT_URLCONF = 'hackernews.urls'
