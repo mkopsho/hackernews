@@ -3,7 +3,7 @@ from graphene_django import DjangoObjectType
 
 from .models import Link, Vote
 from users.schema import UserType
-
+from django.db.models import Q #https://docs.djangoproject.com/en/3.1/ref/models/querysets/#q-objects
 
 class LinkType(DjangoObjectType):
     class Meta:
@@ -14,16 +14,17 @@ class VoteType(DjangoObjectType):
         model = Vote
 
 class Query(graphene.ObjectType):
-    links = graphene.List(LinkType)
-
-    def resolve_links(self, info, **kwargs):
-        return Link.objects.all()
-
-class Query(graphene.ObjectType):
-    links = graphene.List(LinkType)
+    links = graphene.List(LinkType, search=graphene.String())
     votes = graphene.List(VoteType)
 
-    def resolve_links(self, info, **kwargs):
+    def resolve_links(self, info, search=None, **kwargs):
+        if search:
+            filter = (
+                Q(url__icontains=search) |
+                Q(description__icontains=search)
+            )
+            return Link.objects.filter(filter)
+
         return Link.objects.all()
 
     def resolve_votes(self, info, **kwargs):
