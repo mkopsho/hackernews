@@ -1,16 +1,61 @@
-import React from 'react'
+import React, { Component } from 'react'
 
-const Home = () => {
-  return (
-    <div>
-      <h1>
-        Hackner News
+export default class Home extends Component {
+  state = {
+    links: [{ url: "https://kopsho.cafe", description: "My site!" }]
+  }
+
+  componentDidMount() {
+    let query = `
+      query {
+        links {
+          id
+          description
+          url
+        }
+      }
+    `
+
+    let options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query: query })
+    }
+
+    fetch("http://localhost:8000/graphql/", options)
+      .then((response) => response.json())
+      .then((links) => {
+        console.log(links)
+        links.data.links.forEach((link) => {
+          this.setState({
+            links: [...this.state.links, link]
+          })
+        })
+      })
+      .catch(console.error())
+  }
+
+  renderLinks() {
+    return this.state.links.map((link) => {
+      return <li>
+        {link.url} | {link.description}
+      </li>
+    })
+  }
+
+  render() {
+    return (
+      <div>
+        <h1>
+          Hackner News
       </h1>
-      <h2>
-        News about Hackner
+        <h2>
+          News about Hackner
       </h2>
-    </div>
-  )
+        <ul>
+          {this.renderLinks()}
+        </ul>
+      </div>
+    )
+  }
 }
-
-export default Home
