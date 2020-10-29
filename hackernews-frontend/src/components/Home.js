@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 export default class Home extends Component {
   state = {
-    links: [{ url: "https://kopsho.cafe", description: "My site!" }]
+    links: []
   }
 
   componentDidMount() {
@@ -37,8 +37,8 @@ export default class Home extends Component {
 
   renderLinks() {
     return this.state.links.map((link) => {
-      return <li>
-        {link.url} | {link.description}
+      return <li key={link.id}>
+        <a href={link.url}>{link.description}</a>
       </li>
     })
   }
