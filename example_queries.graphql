@@ -76,6 +76,15 @@
 #   }
 # }
 
+# query to delete a link
+# mutation {
+#  deleteLink(id:1) {
+#   id
+#   url
+#   description
+#   } 
+# }
+
 # query to create and return a vote with its associated link
 # mutation {
 #   createVote(linkId: 1) {
