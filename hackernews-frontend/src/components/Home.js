@@ -37,11 +37,36 @@ export default class Home extends Component {
 
   renderLinks() {
     return this.state.links.map((link) => {
-      return <li key={link.id}>
+      return <li
+        key={link.id}>
         <a href={link.url}>{link.description}</a>
+        <button onClick={() => this.deleteLink(link.id)}>X</button>
       </li>
     })
   }
+
+  // deleteLink(linkId) {
+  //   let deleteQuery = `
+  //     mutation {
+  //       deleteLink(id: ${linkId}) {
+  //         id
+  //         description
+  //         url
+  //       }
+  //     }
+  //   `
+
+  //   let options = {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({ query: deleteQuery })
+  //   }
+
+  //   fetch("http://localhost:8000/graphql/", options)
+  //     .then((response) => response.json())
+  //     .then((link) => { console.log(link) })
+  //     .catch(console.error())
+  // }
 
   render() {
     return (
