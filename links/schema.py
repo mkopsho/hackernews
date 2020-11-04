@@ -70,6 +70,24 @@ class CreateLink(graphene.Mutation):
             posted_by=link.posted_by,
         )
 
+class DeleteLink(graphene.Mutation):
+    id = graphene.Int()
+    url = graphene.String()
+    description = graphene.String()
+
+    class Arguments:
+        id = graphene.Int()
+
+    def mutate(self, info, id):
+        link = Link.objects.get(id=id)
+        link.delete()
+
+        return DeleteLink(
+            id=id,
+            url=link.url,
+            description=link.description,
+        )
+
 class CreateVote(graphene.Mutation):
     user = graphene.Field(UserType)
     link = graphene.Field(LinkType)
@@ -96,3 +114,4 @@ class CreateVote(graphene.Mutation):
 class Mutation(graphene.ObjectType):
     create_link = CreateLink.Field()
     create_vote = CreateVote.Field()
+    delete_link = DeleteLink.Field()
