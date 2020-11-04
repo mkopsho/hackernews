@@ -25,7 +25,7 @@ export default class Home extends Component {
     fetch("http://localhost:8000/graphql/", options)
       .then((response) => response.json())
       .then((links) => {
-        console.log(links)
+        // console.log(links)
         links.data.links.forEach((link) => {
           this.setState({
             links: [...this.state.links, link]
@@ -45,28 +45,35 @@ export default class Home extends Component {
     })
   }
 
-  // deleteLink(linkId) {
-  //   let deleteQuery = `
-  //     mutation {
-  //       deleteLink(id: ${linkId}) {
-  //         id
-  //         description
-  //         url
-  //       }
-  //     }
-  //   `
+  deleteLink(linkId) {
+    let deleteQuery = `
+      mutation {
+        deleteLink(id: ${linkId}) {
+          id
+          description
+          url
+        }
+      }
+    `
 
-  //   let options = {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({ query: deleteQuery })
-  //   }
+    let options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query: deleteQuery })
+    }
 
-  //   fetch("http://localhost:8000/graphql/", options)
-  //     .then((response) => response.json())
-  //     .then((link) => { console.log(link) })
-  //     .catch(console.error())
-  // }
+    fetch("http://localhost:8000/graphql/", options)
+      .then((response) => response.json())
+      .then(() => {
+        // console.log(link.data.deleteLink.id)
+        // let deleteId = link.data.deleteLink.id
+        this.setState({
+          links: this.state.links.filter((link) => link.id !== linkId)
+        })
+        console.log(this.state.links)
+      })
+      .catch(console.error())
+  }
 
   render() {
     return (
