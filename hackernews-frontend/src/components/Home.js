@@ -46,16 +46,46 @@ export default class Home extends Component {
     })
   }
 
-  createLink() {
-    console.log("createLink button")
+  createLinkForm() {
+    // console.log("createLink button")
     this.setState({
       createLinkClicked: true
     })
   }
 
   handleOnCreate(e) {
-    console.log("submitLink button")
+    // console.log("submitLink button")
+    // console.log(e.target.url.value)
+    // console.log(e.target.description.value)
     e.preventDefault()
+    let url = e.target.url.value
+    let description = e.target.description.value
+    let query = `
+      mutation {
+        createLink(url: "${url}", description: "${description}") {
+          id
+          url
+          description
+        }
+      }
+    `
+
+    let options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query: query })
+    }
+
+    console.log(query)
+
+    fetch("http://localhost:8000/graphql/", options)
+      .then((response) => response.json())
+      .then((link) => {
+        this.setState({
+          links: [...this.state.links, link]
+        })
+      })
+      .catch(console.error())
   }
 
   deleteLink(linkId) {
@@ -101,11 +131,13 @@ export default class Home extends Component {
           <ul>
             {this.renderLinks()}
           </ul>
-          <button onClick={() => this.createLink()}>Create Link</button>
+          <button onClick={() => this.createLinkForm()}>Create Link</button>
+          <br></br>
+          <br></br>
           <form
             onSubmit={(e) => this.handleOnCreate(e)}>
-            URL: <input type="text" name="url" value={this.state.value}></input>
-            Description: <input type="text" name="description" value={this.state.value}></input>
+            URL: <input type="text" name="url"></input><br></br>
+            Description: <input type="text" name="description"></input><br></br>
             <input type="submit"></input>
           </form>
         </div>
@@ -122,7 +154,7 @@ export default class Home extends Component {
         <ul>
           {this.renderLinks()}
         </ul>
-        <button onClick={() => this.createLink()}>Create Link</button>
+        <button onClick={() => this.createLinkForm()}>Create Link</button>
       </div>
     )
   }
