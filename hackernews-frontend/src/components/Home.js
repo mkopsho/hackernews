@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 
 export default class Home extends Component {
   state = {
-    links: []
+    links: [],
+    createLinkClicked: false
   }
 
   componentDidMount() {
@@ -45,6 +46,17 @@ export default class Home extends Component {
     })
   }
 
+  createLink() {
+    console.log("createLink button")
+    this.setState({
+      createLinkClicked: true
+    })
+  }
+
+  handleOnCreate() {
+    console.log("submitLink button")
+  }
+
   deleteLink(linkId) {
     let deleteQuery = `
       mutation {
@@ -76,17 +88,25 @@ export default class Home extends Component {
   }
 
   render() {
+    if (this.state.createLinkClicked) {
+      return <form
+        onSubmit={() => this.handleOnCreate()}>
+        URL: <input type="text" name="url" value={this.state.value}></input>
+        Description: <input type="text" name="description" value={this.state.value}></input>
+      </form>
+    }
     return (
       <div>
         <h1>
           Hackner News
-      </h1>
+        </h1>
         <h2>
           News about Hackner
-      </h2>
+        </h2>
         <ul>
           {this.renderLinks()}
         </ul>
+        <button onClick={() => this.createLink()}>Create Link</button>
       </div>
     )
   }
