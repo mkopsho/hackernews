@@ -89,11 +89,25 @@ export default class Home extends Component {
 
   render() {
     if (this.state.createLinkClicked) {
-      return <form
-        onSubmit={() => this.handleOnCreate()}>
-        URL: <input type="text" name="url" value={this.state.value}></input>
+      return (
+        <div>
+          <h1>
+            Hackner News
+        </h1>
+          <h2>
+            News about Hackner
+        </h2>
+          <ul>
+            {this.renderLinks()}
+          </ul>
+          <button onClick={() => this.createLink()}>Create Link</button>
+          <form
+            onSubmit={() => this.handleOnCreate()}>
+            URL: <input type="text" name="url" value={this.state.value}></input>
         Description: <input type="text" name="description" value={this.state.value}></input>
-      </form>
+          </form>
+        </div>
+      )
     }
     return (
       <div>
