@@ -53,8 +53,9 @@ export default class Home extends Component {
     })
   }
 
-  handleOnCreate() {
+  handleOnCreate(e) {
     console.log("submitLink button")
+    e.preventDefault()
   }
 
   deleteLink(linkId) {
@@ -102,9 +103,10 @@ export default class Home extends Component {
           </ul>
           <button onClick={() => this.createLink()}>Create Link</button>
           <form
-            onSubmit={() => this.handleOnCreate()}>
+            onSubmit={(e) => this.handleOnCreate(e)}>
             URL: <input type="text" name="url" value={this.state.value}></input>
-        Description: <input type="text" name="description" value={this.state.value}></input>
+            Description: <input type="text" name="description" value={this.state.value}></input>
+            <input type="submit"></input>
           </form>
         </div>
       )
